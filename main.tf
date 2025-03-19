@@ -1,49 +1,43 @@
 provider "aws" {
-  region = var.aws_region  # Using variable for region
+  region = "ap-south-1"  # Change this to your preferred region
 }
 
-# EC2 Instance for Jenkins
+# Generate random suffix for uniqueness
+resource "random_id" "bucket_id" {
+  byte_length = 4
+}
+
+resource "random_id" "role_id" {
+  byte_length = 4
+}
+
+# IAM Role for EC2
+resource "aws_iam_role" "my_role" {
+  name = "jenkins-terraform-role-${random_id.role_id.hex}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = "sts:AssumeRole",
+      Effect = "Allow",
+      Principal = {
+        Service = "ec2.amazonaws.com"
+      }
+    }]
+  })
+}
+
+# EC2 Instance
 resource "aws_instance" "my_instance" {
-  ami           = "ami-0ab53a19308889b24"  # Latest Ubuntu 20.04 AMI
-  instance_type = var.instance_type
+  ami           = "ami-0ab53a19308889b24"  # Ubuntu 20.04 LTS in ap-south-1
+  instance_type = "t2.micro"
 
   tags = {
     Name = "Jenkins-Terraform-EC2"
   }
 }
 
-# Another EC2 Instance (Optional, if you need two instances)
-resource "aws_instance" "web" {
-  ami           = "ami-0ab53a19308889b24"  # Latest Ubuntu 20.04 AMI
-  instance_type = "t2.micro"
-
-  tags = {
-    Name = "Terraform-Instance"
-  }
-}
-
-# S3 Bucket
+# S3 Bucket with unique name
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = var.s3_bucket_name  # Ensure uniqueness
-}
-
-# IAM Role for Jenkins
-resource "aws_iam_role" "my_role" {
-  name = "jenkins-terraform-role"
-
-  assume_role_policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Action": "sts:AssumeRole",
-        "Principal": {
-          "Service": "ec2.amazonaws.com"
-        },
-        "Effect": "Allow",
-        "Sid": ""
-      }
-    ]
-  }
-  EOF
+  bucket = "jenkins-terraform-demo-bucket-${random_id.bucket_id.hex}"
 }
