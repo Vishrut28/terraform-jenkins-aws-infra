@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "my_instance" {
-  ami           = "ami-0c2e61fdcb5495691"  # Replace with a valid AMI ID
+  ami           = "ami-05c179eced2eb9b5b"  # Replace with a valid AMI ID
   instance_type = var.instance_type
   tags = {
     Name = "Jenkins-Terraform-EC2"
