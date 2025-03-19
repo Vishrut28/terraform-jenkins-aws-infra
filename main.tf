@@ -39,5 +39,10 @@ resource "aws_instance" "my_instance" {
 
 # S3 Bucket with unique name
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = "jenkins-terraform-demo-bucket-${random_id.bucket_id.hex}"
+  bucket = "jenkins-terraform-demo-bucket-${random_string.suffix.result}"
+}
+resource "random_string" "suffix" {
+  length  = 6
+  special = false
+  upper   = false
 }
