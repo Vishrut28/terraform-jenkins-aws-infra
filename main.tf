@@ -29,7 +29,7 @@ resource "aws_iam_role" "my_role" {
 
 # EC2 Instance
 resource "aws_instance" "my_instance" {
-  ami           = "ami-05c179eced2eb9b5b"  # Ubuntu 20.04 LTS in ap-south-1
+  ami           = "ami-014e2b14bdb83e8ca"  # Ubuntu 20.04 LTS in ap-south-1
   instance_type = "t2.micro"
 
   tags = {
