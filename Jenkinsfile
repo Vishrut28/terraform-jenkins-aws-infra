@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO.git'
+                git branch: 'main', url: 'https://github.com/Vishrut28/terraform-jenkins-aws-infra.git'
             }
         }
         stage('Terraform Init') {
